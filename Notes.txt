@@ -1,0 +1,7 @@
+######### Notes Generale######
+
+____Ziad______
+
+-Lorsqu'une recherche est effectuee, la checklist a gauhe n'est plus bien affichee... d'ailleurs l'url correspond pas forcement..
+-Rendre plus beau
+- Aussi.. soit renome la page MyTasks, soit en faire une nouvelle avec juste tasks... car dans les checkbox je peux choisir une personne qui n'est pas moi ..."
