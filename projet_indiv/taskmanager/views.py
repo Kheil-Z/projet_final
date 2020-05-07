@@ -36,13 +36,6 @@ def projects(request):
         list_projects.append(infos)  # add the infos cells in the list of projects
         infos = []
         count += 1
-
-    # Test pour une query
-    if request.method == "POST":
-        query = request.POST["query"]
-        user = request.user
-        return render(request,'/taskmanager/task/' + str(id1) + '/' + str(id2))
-
     return render(request, 'list_projects.html', locals())
 
 
@@ -197,3 +190,20 @@ def export(request):
     response = HttpResponse({dataset_p.csv, dataset_s.csv, dataset_t, dataset_j}, content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="exported_data.csv"'
     return response
+
+@login_required
+def search(request):
+    if request.method == "GET":
+        query = request.GET["query"]
+        query_list = query.split()
+        user = request.user
+        list_tasks=Task.objects.filter(name__contains=query)
+
+        print("..........")
+        print(query)
+        print(".........")
+        print(query_list)
+        return render(request,'mytasks.html' ,locals())
+    else:
+        print("..........................no")
+        return render(request,'list_projects.html',locals())
