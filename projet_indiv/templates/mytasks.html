@@ -17,7 +17,29 @@
 
         <br><br><br>
         <div class="row">
-            <div class="col-8">
+            <div class="col-2" >
+            <form action="/action_page.php">
+                <div class="form-check" style=" outline: 5px black">
+                    <label class="form-check-label" for="check1">
+                        <input type="checkbox" class="form-check-input" id="check1" name="option1" value="something" checked>Option 1
+                    </label>
+                </div>
+                <div class="form-check">
+                    <label class="form-check-label" for="check2">
+                        <input type="checkbox" class="form-check-input" id="check2" name="option2" value="something">Option 2
+                    </label>
+                </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                    <input type="checkbox" class="form-check-input" disabled>Option 3
+                </label>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+            </div>
+
+
+            <div class="col-6">
 
                 <!-- Table of tasks -->
                 <table class="table">
