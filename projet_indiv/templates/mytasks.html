@@ -16,49 +16,105 @@
         </div>
 
         <br><br><br>
+        <div class="row">
+            <div class="col-8">
 
-        <div class="col-11">
+                <!-- Table of tasks -->
+                <table class="table">
 
-            <!-- Table of tasks -->
-            <table class="table">
+                    <!-- heads -->
+                    <thead>
+                        <tr>
+                            <th scope="col" >Task</th>
+                            <th scope="col" class="text-center">Project</th>
+                            <th scope="col" class="text-center">Start date</th>
+                            <th scope="col" class="text-center">Due date</th>
+                            <th scope="col" class="text-center">Progress</th>
+                            <th scope="col" class="text-center"></th>
+                        </tr>
+                    </thead>
 
-                <!-- heads -->
-                <thead>
-                    <tr>
-                        <th scope="col" >Task</th>
-                        <th scope="col" class="text-center">Project</th>
-                        <th scope="col" class="text-center">Start date</th>
-                        <th scope="col" class="text-center">Due date</th>
-                        <th scope="col" class="text-center">Progress</th>
-                        <th scope="col" class="text-center"></th>
-                    </tr>
-                </thead>
+                    <!-- body of the table -->
+                    <tbody>
+                        {% for task in list_tasks %}
+                                <tr>
+                                    <th scope="row" ><a href="/task/{{task.id}}">{{task.name}}</a></th>
+                                    <th scope="row" class="text-center"><a href="/project/{{task.project.id}}">{{task.project.name}}</a></th>
+                                    <td scope="row" class="text-center">{{task.start_date}}</td>
+                                    <td scope="row" class="text-center">{{task.due_date}}</td>
+                                    <td scope="row" class="text-center">
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" aria-valuenow="{{task.progress}}" aria-valuemin="0" aria-valuemax="100" style="width:{{task.progress}}%">{{task.progress}}%</div>
+                                        </div>
+                                    </td>
+                                    <td scope="row" class="text-center">
+                                        <a href="/updatetask/{{task.id}}">
+                                            <img src="https://cdn.onlinewebfonts.com/svg/img_148628.png" width="20" height="20">
+                                        </a>
+                                    </td>
+                                </tr>
 
-                <!-- body of the table -->
-                <tbody>
-                    {% for task in list_tasks %}
-                            <tr>
-                                <th scope="row" ><a href="/task/{{task.id}}">{{task.name}}</a></th>
-                                <th scope="row" class="text-center"><a href="/project/{{task.project.id}}">{{task.project.name}}</a></th>
-                                <td scope="row" class="text-center">{{task.start_date}}</td>
-                                <td scope="row" class="text-center">{{task.due_date}}</td>
-                                <td scope="row" class="text-center">
-                                    <div class="progress">
-                                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" aria-valuenow="{{task.progress}}" aria-valuemin="0" aria-valuemax="100" style="width:{{task.progress}}%">{{task.progress}}%</div>
-                                    </div>
-                                </td>
-                                <td scope="row" class="text-center">
-                                    <a href="/updatetask/{{task.id}}">
-                                        <img src="https://cdn.onlinewebfonts.com/svg/img_148628.png" width="20" height="20">
-                                    </a>
-                                </td>
-                            </tr>
+                        {% endfor %}
+                    </tbody>
 
-                    {% endfor %}
-                </tbody>
+                </table>
+                <!-- end of table -->
+            </div>
 
-            </table>
-            <!-- end of table -->
+
+            <div class="col-4">
+                <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+                <script src="../../../../dist/2.9.3/Chart.min.js"></script>
+                <script src="../../utils.js"></script>
+                <style>
+                    canvas {
+                        -moz-user-select: none;
+                        -webkit-user-select: none;
+                        -ms-user-select: none;
+                    }
+                </style>
+            <div class="chart-container" style="position: relative; height:10vh; width:20vw">
+                <canvas id="myChart" width="400" height="400"></canvas>
+                <script>
+                    var ctx = document.getElementById('myChart').getContext('2d');
+                    var chart = new Chart(ctx, {
+                        // The type of chart we want to create
+                        type: 'radar',
+
+                        // The data for our dataset
+                        data: {
+                            labels: [
+                                {% for project in list_projects %}
+                                    '{{project.name}}',
+                                {% endfor %}
+                            ],
+                            datasets: [{
+                                label: 'number of tasks',
+                                backgroundColor: 'rgb(255, 99, 132,0.2)',
+                                borderColor: 'rgb(255, 99, 132)',
+                                data: [
+                                    {% for data in chart_data %}
+                                {{data}},
+                                    {% endfor %}
+
+                                ]
+                            }
+                            ]
+                        },
+
+                        // Configuration options go here
+                        options: {scale: {
+                        ticks: {
+                            beginAtZero: true,
+                            min: 0,
+                            stepSize: 1
+                        }
+                    }}
+                    });
+
+                    </script>
+                </div>
+            </div>
         </div>
 
 

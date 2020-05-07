@@ -31,5 +31,6 @@ urlpatterns = [
     path('donetasks/', views.donetasks),  # List of done tasks
     path('activity/<int:id_project>', views.activity),  # A form to update a already existing task
     path('export/', views.export),  # Exports the data from the app
-    path('search/',views.search), # To forward for a search
+    path('gantt/<int:id_project>', views.gantt),
+
 ]
