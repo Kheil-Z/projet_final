@@ -168,6 +168,7 @@ def mytasks(request):
     list_tasks = Task.objects.filter(assignee=user)
     list_projects = Project.objects.filter(members=user)
     chart_data=[]
+    members = User.objects.all()
     for project in list_projects:
         chart_data.append(Task.objects.filter(assignee=user,project=project).count())
     return (render(request, 'mytasks.html', locals()))
@@ -222,12 +223,17 @@ def search(request): # Method for a search query
         query_list = query.split()
         user = request.user
         list_tasks=Task.objects.filter(name__contains=query)
-
-        print("..........")
-        print(query)
-        print(".........")
-        print(query_list)
         return render(request,'mytasks.html' ,locals())
     else:
-        print("..........................no")
+        return render(request,'list_projects.html',locals())
+
+@login_required
+def filters(request): # Method for a search query
+    if request.method == "GET" and 'member' in request.GET:
+        query = request.GET["member"]
+        query_list = [User.objects.all().get(username=m) for m in query.split()]
+        user = request.user
+        list_tasks=Task.objects.filter(assignee=query_list[0])
+        return render(request,'mytasks.html' ,locals())
+    else:
         return render(request,'list_projects.html',locals())

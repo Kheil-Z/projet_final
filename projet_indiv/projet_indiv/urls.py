@@ -34,6 +34,7 @@ urlpatterns = [
     path('gantt/<int:id_project>', views.gantt),
 
     path('search/',views.search), # To forward for a search
+    path('filters/',views.filters), # To forward for filtering tasks
 
 
 ]
