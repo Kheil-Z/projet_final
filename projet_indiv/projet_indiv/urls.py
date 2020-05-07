@@ -30,4 +30,5 @@ urlpatterns = [
     path('mytasks/', views.mytasks),  # Lis of the tasks of connected user
     path('donetasks/', views.donetasks),  # List of done tasks
     path('activity/<int:id_project>', views.activity),  # A form to update a already existing task
+    path('export/', views.export),  # Exports the data from the app
 ]

@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.shortcuts import render
 from taskmanager.models import Project, Task, Journal, Status
 from taskmanager.forms import NewTaskForm, NewJournalForm
+from django.http import HttpResponse
+from .resources import ProjectResource, StatusResource, TaskResource, JournalResource
 
 
 # Create your views here.
@@ -50,7 +52,7 @@ def project(request, id_project):
     user = request.user
     project = Project.objects.get(id=id_project)
     list_tasks = Task.objects.filter(project=project)  # List of the tasks of this project
-    progress=projectprogress(project)
+    progress = projectprogress(project)
     return render(request, 'project.html', locals())
 
 
@@ -162,23 +164,36 @@ def newjournal(request, id_task):
 
     return render(request, 'newjournal.html', locals())
 
+
 @login_required
 def mytasks(request):
     user = request.user
     list_tasks = Task.objects.filter(assignee=user)
-    return(render(request, 'mytasks.html',locals()))
+    return (render(request, 'mytasks.html', locals()))
+
 
 @login_required
 def donetasks(request):
     user = request.user
-    done_status =Status.objects.get(name="Terminée")
-    list_tasks = Task.objects.filter(assignee=user, status=done_status )
-    return(render(request, 'donetasks.html',locals()))
+    done_status = Status.objects.get(name="Terminée")
+    list_tasks = Task.objects.filter(assignee=user, status=done_status)
+    return (render(request, 'donetasks.html', locals()))
+
 
 @login_required
-def activity(request,id_project):
-    user=request.user
+def activity(request, id_project):
+    user = request.user
     project = Project.objects.get(id=id_project)
     list_journals = Journal.objects.filter(task__project=project).order_by('-date')
     return (render(request, 'activity.html', locals()))
 
+
+@login_required
+def export(request):
+    dataset_p = ProjectResource().export()
+    dataset_s = StatusResource().export()
+    dataset_t = TaskResource().export()
+    dataset_j = JournalResource().export()
+    response = HttpResponse({dataset_p.csv, dataset_s.csv, dataset_t, dataset_j}, content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="exported_data.csv"'
+    return response
