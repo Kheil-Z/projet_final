@@ -7,7 +7,12 @@ from django.http import HttpResponse
 from .resources import ProjectResource, StatusResource, TaskResource, JournalResource
 
 
-# Create your views here.
+
+def home(request):  # Page D'acceuille
+    if request.user.is_authenticated:  # Si l'utilisateur est connectee on receuille ses donnees, qui passeront a la vue
+        user = request.user
+    return render(request, 'home.html', locals())
+
 
 
 def projectprogress(project):
@@ -164,14 +169,29 @@ def newjournal(request, id_task):
 
 @login_required
 def mytasks(request):
-    user = request.user
-    list_tasks = Task.objects.filter(assignee=user)
-    list_projects = Project.objects.filter(members=user)
-    chart_data=[]
     members = User.objects.all()
-    for project in list_projects:
-        chart_data.append(Task.objects.filter(assignee=user,project=project).count())
-    return (render(request, 'mytasks.html', locals()))
+    #First we check if a search was made, i.e if the Get request contains a "query" element
+    if (request.method == "GET") and ("query" in request.GET):
+        query = request.GET["query"]
+        query_list = query.split()
+        user = request.user
+        list_tasks=Task.objects.filter(name__contains=query)
+        return render(request,'mytasks.html' ,locals())
+    # Again, we now check if some form of filter was activated...
+    elif (request.method == "GET") and ('member' in request.GET):
+        query = request.GET["member"]
+        query_list = [User.objects.all().get(username=m) for m in query.split()]
+        user = request.user
+        list_tasks=Task.objects.filter(assignee=query_list[0])
+        return render(request,'mytasks.html' ,locals())
+    # Else we just show the user all of HIS tasks
+        user = request.user
+        list_tasks = Task.objects.filter(assignee=user)
+        list_projects = Project.objects.filter(members=user)
+        chart_data=[]
+        for project in list_projects:
+            chart_data.append(Task.objects.filter(assignee=user,project=project).count())
+        return (render(request, 'mytasks.html', locals()))
 
 
 @login_required
@@ -223,17 +243,6 @@ def search(request): # Method for a search query
         query_list = query.split()
         user = request.user
         list_tasks=Task.objects.filter(name__contains=query)
-        return render(request,'mytasks.html' ,locals())
-    else:
-        return render(request,'list_projects.html',locals())
-
-@login_required
-def filters(request): # Method for a search query
-    if request.method == "GET" and 'member' in request.GET:
-        query = request.GET["member"]
-        query_list = [User.objects.all().get(username=m) for m in query.split()]
-        user = request.user
-        list_tasks=Task.objects.filter(assignee=query_list[0])
-        return render(request,'mytasks.html' ,locals())
+        return render(request,'search.html' ,locals())
     else:
         return render(request,'list_projects.html',locals())

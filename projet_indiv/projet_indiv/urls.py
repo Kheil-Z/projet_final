@@ -19,6 +19,7 @@ from taskmanager import views
 
 # URLs to acces the different pages
 urlpatterns = [
+    path('', views.home), # Chemin initial vers le home.
     path('admin/', admin.site.urls),  # Django administration
     path('accounts/', include('django.contrib.auth.urls')),  # Generic views : to connect use 'accounts/login'
     path('projects/', views.projects),  # List of projects of the connected user
@@ -33,8 +34,6 @@ urlpatterns = [
     path('export/', views.export),  # Exports the data from the app
     path('gantt/<int:id_project>', views.gantt),
 
-    path('search/',views.search), # To forward for a search
-    path('filters/',views.filters), # To forward for filtering tasks
 
 
 ]

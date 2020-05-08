@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    <!-- Main container -->
+    <main>
+        <br><br><br><br>
+
+        {% if user.is_authenticated%}
+            <!-- Jumbotron -->
+            <div class="jumbotron jumbotron-fluid">
+              <div class="container">
+                <h1 class="display-4">Home</h1>
+                <p class="lead">Welcome {{user.username}}</p>
+              </div>
+            </div>
+        {% else %}
+            <!-- Jumbotron -->
+            <div class="jumbotron jumbotron-fluid">
+              <div class="container">
+                <h1 class="display-4">Home</h1>
+                <p class="lead">Hello! To have access please <a href="registration/login.html"> sign-in</a></p>
+              </div>
+            </div>
+        {%endif%}}
+    </main>
+{%endblock%}
