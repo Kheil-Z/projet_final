@@ -49,29 +49,39 @@
 
                 <form action="/project/{{id_project}}" class="inline">
                     <div class="row">
+                    <!--  Member Filter-->
                         <div class="col-2" style="margin-left: 10px" >
-                            <div style="width:100px;height:50px;border:1px solid #000;">
-                                {% for m in members %}
-                                <div class="form-check">
-                                    <label class="form-check-label" for="check1">
-                                        <input type="checkbox" class="form-check-input" id="check1" name="member" {%if m in query_list%}checked{%endif%} value="{{m}}">{{m.username}}
-                                    </label>
-                                </div>
-                                {%endfor%}
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                            <label class="form-check-label" for="check">Members</label>
+                            {% for m in members %}
+                            <div class="form-check" id="check">
+                                <input type="checkbox" class="form-check-input" id="check1" name="member" {%if m in query_list%}checked{%endif%} value="{{m}}">{{m.username}}
                             </div>
+                            {%endfor%}
                         </div>
-                        <div class="col-2" >
-                                <label for="customRange1">Progress</label>
-                                <input type="range" class="custom-range" id="customRange1">
-                        </div>
+                    <!-- Start Date Filter-->
                         <div class="col-2">
                             <div class="form-group"> <!-- Date input -->
-                                <label class="control-label" for="date">Date</label>
-                                <input class="form-control" id="date" name="date" placeholder="MM/DD/YYY" type="text"/>
+                                <label class="control-label" for="date">Start Date after:</label>
+                                <input class="form-control" id="date" name="date" placeholder="MM/DD/YYYY" type="text"/>
+                            </div>
+                            <div class="form-group"> <!-- Date input -->
+                                <label class="control-label" for="date">Start Date before:</label>
+                                <input class="form-control" id="date" name="date" placeholder="MM/DD/YYYY" type="text"/>
+                            </div>
+                        </div>
+                    <!-- Due Date Filter-->
+                        <div class="col-2">
+                            <div class="form-group"> <!-- Date input -->
+                                <label class="control-label" for="date">Due Date before:</label>
+                                <input class="form-control" id="date" name="date" placeholder="MM/DD/YYYY" type="text"/>
+                            </div>
+                            <div class="form-group"> <!-- Date input -->
+                                <label class="control-label" for="date">Due Date after:</label>
+                                <input class="form-control" id="date" name="date" placeholder="MM/DD/YYYY" type="text"/>
                             </div>
                         </div>
                     </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
 
             </div>
