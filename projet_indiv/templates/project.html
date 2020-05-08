@@ -40,6 +40,35 @@
         </p>
 
         <br>
+            <!--   Checkbox for search     -->
+        <form action="/project/{{id_project}}">
+            <div class="row">
+                <div class="col-2" style="margin-left: 10px" >
+                    <div style="width:100px;height:50px;border:1px solid #000;">
+                        {% for m in members %}
+                        <div class="form-check">
+                            <label class="form-check-label" for="check1">
+                                <input type="checkbox" class="form-check-input" id="check1" name="member" {%if m in query_list%}checked{%endif%} value="{{m}}">{{m.username}}
+                            </label>
+                        </div>
+                        {%endfor%}
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+                <div class="col-2" >
+                        <label for="customRange1">Progress</label>
+                        <input type="range" class="custom-range" id="customRange1">
+                </div>
+                <div class="col-2">
+                    <div class="input-group input-daterange">
+                        <input type="text" class="form-control" value="2012-04-05">
+                            <div class="input-group-addon">to</div>
+                        <input type="text" class="form-control" value="2012-04-19">
+                    </div>
+                </div>
+            </div>
+        </form>
+        <br><br><br>
 
         <div class="col-12">
 

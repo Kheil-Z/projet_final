@@ -53,11 +53,18 @@ def projects(request):
 # View for the display of a project and its details
 @login_required
 def project(request, id_project):
+    members = User.objects.all()
     projects = Project.objects.all()
     user = request.user
     project = Project.objects.get(id=id_project)
     list_tasks = Task.objects.filter(project=project)  # List of the tasks of this project
     progress=projectprogress(project)
+
+    # Now we apply more filters if the user requested some...
+    if (request.method == "GET") and ('member' in request.GET):
+        query = request.GET.getlist("member")
+        query_list = [User.objects.all().get(username=m) for m in query]
+        list_tasks = list_tasks.filter(assignee__in=query_list)
     return render(request, 'project.html', locals())
 
 
