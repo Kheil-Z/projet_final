@@ -69,6 +69,8 @@ def project(request, id_project):
         query = request.GET.getlist("member")
         query_list = [User.objects.all().get(username=m) for m in query]
         list_tasks = list_tasks.filter(assignee__in=query_list)
+
+    list_tasks = ordering(request, list_tasks)
     return render(request, 'project.html', locals())
 
 
@@ -253,4 +255,18 @@ def export(request):
     response = HttpResponse({dataset_p.csv, dataset_s.csv, dataset_t, dataset_j}, content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="exported_data.csv"'
     return response
+
+
+
+
+########Analog function for better readability, used for filtering queries
+def ordering(request,task_query_set):
+    if (request.method == "GET") and ('sort' in request.GET):
+        query = request.GET["sort"]
+        q=query.split()
+        if q[1] == "up" :
+            task_query_set.filter().order_by(q[0])
+        else:
+            task_query_set.order_by('-'+q[0])
+    return task_query_set
 
