@@ -5,3 +5,20 @@ ____Ziad______
 -Lorsqu'une recherche est effectuee, la checklist a gauhe n'est plus bien affichee... d'ailleurs l'url correspond pas forcement..
 -Rendre plus beau
 - Aussi.. soit renome la page MyTasks, soit en faire une nouvelle avec juste tasks... car dans les checkbox je peux choisir une personne qui n'est pas moi ..."
+
+
+
+
+________Idee globale:
+
+-home page
+-Journals en mode commentaire direct,
+-"Not Registered yet" page
+-Supprimer les script de css eronneee...
+-Fix "Please sign in page in home.html"
+-On pourrait peut etre creer certainnes variable globale style: USERS qui est souvent utilisee dans beacoup de fonctions de views...
+
+
+_________Problem:
+-Apres uen recherche, je peux pas faire en sorte que le placeholder de la searchbar soit l'ancienne recherche, car il se situe dans base.html...
+-Si on retricit la fenetre (sur /mytasks/ par exemple... gros bordel
