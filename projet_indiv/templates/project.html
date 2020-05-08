@@ -41,7 +41,7 @@
 
         <br>
             <!--   Checkbox for search     -->
-        <form action="/project/{{id_project}}">
+        <form action="/project/{{id_project}}" class="inline">
             <div class="row">
                 <div class="col-2" style="margin-left: 10px" >
                     <div style="width:100px;height:50px;border:1px solid #000;">
@@ -60,11 +60,17 @@
                         <input type="range" class="custom-range" id="customRange1">
                 </div>
                 <div class="col-2">
-                    <div class="input-group input-daterange">
-                        <input type="text" class="form-control" value="2012-04-05">
-                            <div class="input-group-addon">to</div>
-                        <input type="text" class="form-control" value="2012-04-19">
+                    <div class="form-group"> <!-- Date input -->
+                        <label class="control-label" for="date">Date</label>
+                        <input class="form-control" id="date" name="date" placeholder="MM/DD/YYY" type="text"/>
                     </div>
+<!--                    <div class="form-group">-->
+<!--                        <label for="startDate">Start Date</label>-->
+<!--                        <input id="startDate" name="startDate" type="text" class="form-control" />-->
+<!--                        &nbsp;-->
+<!--                        <label for="endDate">End Date</label>-->
+<!--                        <input id="endDate" name="endDate" type="text" class="form-control" />-->
+<!--                    </div>-->
                 </div>
             </div>
         </form>

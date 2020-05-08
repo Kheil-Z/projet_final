@@ -1,4 +1,5 @@
 from django.forms import forms, ModelForm
+from django.forms import DateField,SelectDateWidget
 
 from taskmanager.models import Task, Journal
 
@@ -17,3 +18,4 @@ class NewJournalForm(ModelForm):
     class Meta:
         model = Journal
         exclude = ('date',)  # Date/time auto-filled with the current date/time
+
