@@ -41,32 +41,41 @@
 
         <br>
             <!--   Checkbox for search     -->
-        <form action="/project/{{id_project}}" class="inline">
-            <div class="row">
-                <div class="col-2" style="margin-left: 10px" >
-                    <div style="width:100px;height:50px;border:1px solid #000;">
-                        {% for m in members %}
-                        <div class="form-check">
-                            <label class="form-check-label" for="check1">
-                                <input type="checkbox" class="form-check-input" id="check1" name="member" {%if m in query_list%}checked{%endif%} value="{{m}}">{{m.username}}
-                            </label>
+        <button class="btn btn-xs " style="background-color: lightgreen; type="button" data-toggle="collapse" data-target="#Filtering" aria-expanded="false" aria-controls="collapseExample">
+            Advanced Search
+        </button>
+        <div class="collapse" id="Filtering">
+            <div class="card card-body">
+
+                <form action="/project/{{id_project}}" class="inline">
+                    <div class="row">
+                        <div class="col-2" style="margin-left: 10px" >
+                            <div style="width:100px;height:50px;border:1px solid #000;">
+                                {% for m in members %}
+                                <div class="form-check">
+                                    <label class="form-check-label" for="check1">
+                                        <input type="checkbox" class="form-check-input" id="check1" name="member" {%if m in query_list%}checked{%endif%} value="{{m}}">{{m.username}}
+                                    </label>
+                                </div>
+                                {%endfor%}
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
                         </div>
-                        {%endfor%}
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <div class="col-2" >
+                                <label for="customRange1">Progress</label>
+                                <input type="range" class="custom-range" id="customRange1">
+                        </div>
+                        <div class="col-2">
+                            <div class="form-group"> <!-- Date input -->
+                                <label class="control-label" for="date">Date</label>
+                                <input class="form-control" id="date" name="date" placeholder="MM/DD/YYY" type="text"/>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="col-2" >
-                        <label for="customRange1">Progress</label>
-                        <input type="range" class="custom-range" id="customRange1">
-                </div>
-                <div class="col-2">
-                    <div class="form-group"> <!-- Date input -->
-                        <label class="control-label" for="date">Date</label>
-                        <input class="form-control" id="date" name="date" placeholder="MM/DD/YYY" type="text"/>
-                    </div>
-                </div>
+                </form>
+
             </div>
-        </form>
+        </div>
         <br><br><br>
 
         <div class="col-12">
