@@ -23,7 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),  # Django administration
     path('accounts/', include('django.contrib.auth.urls')),  # Generic views : to connect use 'accounts/login'
     path('projects/', views.projects),  # List of projects of the connected user
-    path('project/<int:id_project>', views.project),  # Project and details of this project
+    path('project/<int:id_project>', views.project,name="project"),  # Project and details of this project
     path('task/<int:id_task>', views.task),  # Task and details of this task
     path('newtask/', views.newtask),  # A form to add a new task
     path('updatetask/<int:id_task>', views.updatetask),  # A form to update a already existing task

@@ -28,7 +28,7 @@
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
 
       <!-- TaskManager button-->
-      <a class="navbar-brand" href="/projects">TaskManager</a>
+      <a class="navbar-brand" href="/">TaskManager</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -36,20 +36,33 @@
       <!-- Items in nav bar button -->
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="/projects">My projects <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle"  id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-               <font color="white"> Tasks</font>
+            <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle"  role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+               <font color="white"> My Projects</font>
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                <a class="dropdown-item" href="/mytasks">My tasks</a>
-                <a class="dropdown-item" href="/donetasks">My completed tasks</a>
+                {% for p in projects %}
+                    <a class="dropdown-item" href="/project/{{p.id}}">{{p.name}}</a>
+                {%endfor%}
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item text-success" href="/newtask">+ New task </a>
+                <a class="dropdown-item text-success" href="/projects">All</a>
+                <div class="dropdown-divider"></div>
+<!--                A coder-->
+                <a class="dropdown-item text-success" href="/newtask">+ New Project </a>
             </div>
-          </li>
+            </li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle"  id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <font color="white"> Tasks</font>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="/mytasks">My tasks</a>
+                    <a class="dropdown-item" href="/donetasks">My completed tasks</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item text-success" href="/newtask">+ New task </a>
+                </div>
+            </li>
         </ul>
         <!--  Bar de Recherche   -->
         <form class="form-inline my-2 my-lg-0" action="/mytasks">

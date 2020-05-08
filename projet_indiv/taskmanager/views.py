@@ -11,6 +11,7 @@ from .resources import ProjectResource, StatusResource, TaskResource, JournalRes
 def home(request):  # Page D'acceuille
     if request.user.is_authenticated:  # Si l'utilisateur est connectee on receuille ses donnees, qui passeront a la vue
         user = request.user
+        projects = Project.objects.all()
     return render(request, 'home.html', locals())
 
 
@@ -30,6 +31,7 @@ def projectprogress(project):
 # View for the list of projects
 @login_required
 def projects(request):
+    projects = Project.objects.all()
     user = request.user
     list_projects = []  # Each cell of list_projects will contains information about a project
     infos = []  # the info cell of a project
@@ -51,6 +53,7 @@ def projects(request):
 # View for the display of a project and its details
 @login_required
 def project(request, id_project):
+    projects = Project.objects.all()
     user = request.user
     project = Project.objects.get(id=id_project)
     list_tasks = Task.objects.filter(project=project)  # List of the tasks of this project
@@ -61,6 +64,7 @@ def project(request, id_project):
 # View for the display of a task and its details
 @login_required
 def task(request, id_task):
+    projects = Project.objects.all()
     user = request.user
     task = Task.objects.get(id=id_task)
     project = Project.objects.get(id=task.project.id)
@@ -170,6 +174,7 @@ def newjournal(request, id_task):
 @login_required
 def mytasks(request):
     members = User.objects.all()
+    projects = Project.objects.all()
     #First we check if a search was made, i.e if the Get request contains a "query" element
     if (request.method == "GET") and ("query" in request.GET):
         query = request.GET["query"]
@@ -185,6 +190,7 @@ def mytasks(request):
         list_tasks=Task.objects.filter(assignee=query_list[0])
         return render(request,'mytasks.html' ,locals())
     # Else we just show the user all of HIS tasks
+    else:
         user = request.user
         list_tasks = Task.objects.filter(assignee=user)
         list_projects = Project.objects.filter(members=user)
@@ -196,6 +202,7 @@ def mytasks(request):
 
 @login_required
 def donetasks(request):
+    projects = Project.objects.all()
     user = request.user
     done_status = Status.objects.get(name="Terminée")
     list_tasks = Task.objects.filter(assignee=user, status=done_status)
@@ -236,13 +243,3 @@ def export(request):
     response['Content-Disposition'] = 'attachment; filename="exported_data.csv"'
     return response
 
-@login_required
-def search(request): # Method for a search query
-    if request.method == "GET":
-        query = request.GET["query"]
-        query_list = query.split()
-        user = request.user
-        list_tasks=Task.objects.filter(name__contains=query)
-        return render(request,'search.html' ,locals())
-    else:
-        return render(request,'list_projects.html',locals())
