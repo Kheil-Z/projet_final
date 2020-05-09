@@ -69,8 +69,10 @@ def project(request, id_project):
         query = request.GET.getlist("member")
         query_list = [User.objects.all().get(username=m) for m in query]
         list_tasks = list_tasks.filter(assignee__in=query_list)
+    # list_tasks = ordering(request, list_tasks)
+    status_q_list = filters(request, list_tasks)
 
-    list_tasks = ordering(request, list_tasks)
+    Status_all = Status.objects.all(); #Needed for the template and form...
     return render(request, 'project.html', locals())
 
 
@@ -270,3 +272,9 @@ def ordering(request,task_query_set):
             task_query_set.order_by('-'+q[0])
     return task_query_set
 
+def filters(request,task_query_set):
+    status_q_list =[]
+    if (request.method == "GET") and ('status' in request.GET):
+        status_q = request.GET.getlist("status")
+        status_q_list = [Status.objects.all().get(name=s) for s in status_q]
+    return(status_q_list)

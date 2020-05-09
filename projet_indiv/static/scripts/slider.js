@@ -1,7 +1,7 @@
 var slider = document.getElementById('progress');
 
 noUiSlider.create(slider, {
-    start: [20, 80],
+    start: [0, 100],
     connect: true,
     tooltips: [true, true],
     range: {
@@ -10,7 +10,7 @@ noUiSlider.create(slider, {
     }
 });
 
-// var select = document.getElementById('input-select');
+// var select = document.getElementById('min_progress');
 //
 // // Append the option elements
 // for (var i = -20; i <= 40; i++) {
@@ -31,8 +31,8 @@ noUiSlider.create(slider, {
 //         'max': 100
 //     }
 // });
-// var inputNumber = document.getElementById('input-number');
-//
+// var inputNumber = document.getElementById('max_progress');
+// //
 // html5Slider.noUiSlider.on('update', function (values, handle) {
 //
 //     var value = values[handle];

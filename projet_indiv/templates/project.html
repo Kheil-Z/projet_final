@@ -80,37 +80,23 @@
                                 <input class="form-control" id="date" name="date" placeholder="MM/DD/YYYY" type="text"/>
                             </div>
                         </div>
+
                     <!--  Member Filter-->
-                        <div class="col-2" style="margin-left: 10px" >
+                        <div class="col-2">
                             <label class="form-check-label" for="status_check">Status Type</label>
+                            {% for s in Status_all %}
                             <div class="form-check" id="status_check">
-                                <input type="checkbox" class="form-check-input" name="status"  value="En cours">En cours
+                                <input type="checkbox" class="form-check-input" name="status" {%if s in status_q_list%}checked{%endif%} value="{{s}}">{{s.name}}
                             </div>
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" name="status"  value="En attente">En attente
-                            </div>
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" name="status"  value="Nouvelle">Nouvelle
-                            </div>
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" name="status"  value="Terminée">Terminée
-                            </div>
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" name="status"  value="Classée">Classée
-                            </div>
+                            {%endfor%}
                         </div>
-                        <!--  Member Filter-->
+
+                        <!--  Progress % Filter-->
                         <div class="col-2">
                             <p>Progress</p>
-                            <br>
                             <div id="progress"></div>
                             <input id="sliderValueInput" type="hidden" value="">
                         </div>
-<!--                        <section class="range-slider">-->
-<!--                          <span class="rangeValues"></span>-->
-<!--                          <input value="5" min="0" max="15" step="0.5" type="range">-->
-<!--                          <input value="10" min="0" max="15" step="0.5" type="range">-->
-<!--                        </section>-->
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
