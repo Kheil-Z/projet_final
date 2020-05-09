@@ -11,13 +11,11 @@ from django.http import HttpResponse
 from .resources import ProjectResource, StatusResource, TaskResource, JournalResource
 
 
-
 def home(request):  # Page D'acceuille
     if request.user.is_authenticated:  # Si l'utilisateur est connectee on receuille ses donnees, qui passeront a la vue
         user = request.user
         projects = Project.objects.all()
     return render(request, 'home.html', locals())
-
 
 
 def projectprogress(project):
@@ -27,8 +25,8 @@ def projectprogress(project):
     for task in list_tasks:
         i += 1
         progress += task.progress
-    if i==0 :
-        i=1
+    if i == 0:
+        i = 1
     return (int(progress / i))
 
 
@@ -49,9 +47,7 @@ def projects(request):
         list_projects.append(infos)  # add the infos cells in the list of projects
         infos = []
         count += 1
-    return render(request,'list_projects.html',locals())
-
-
+    return render(request, 'list_projects.html', locals())
 
 
 # View for the display of a project and its details
@@ -62,7 +58,7 @@ def project(request, id_project):
     user = request.user
     project = Project.objects.get(id=id_project)
     list_tasks = Task.objects.filter(project=project)  # List of the tasks of this project
-    progress=projectprogress(project)
+    progress = projectprogress(project)
 
     # # Now we apply more filters if the user requested some...
     # if (request.method == "GET") and ('member' in request.GET):
@@ -70,7 +66,7 @@ def project(request, id_project):
     #     query_list = [User.objects.all().get(username=m) for m in query]
     #     list_tasks = list_tasks.filter(assignee__in=query_list)
     # list_tasks = ordering(request, list_tasks)
-    list_tasks,status_q_list,query_list,date1 = filters(request, list_tasks)
+    list_tasks, status_q_list, query_list, date1, date2, date3, date4 = filters(request, list_tasks)
 
     # Needed for the template and form...
     Status_all = Status.objects.all()
@@ -191,28 +187,28 @@ def newjournal(request, id_task):
 def mytasks(request):
     members = User.objects.all()
     projects = Project.objects.all()
-    #First we check if a search was made, i.e if the Get request contains a "query" element
+    # First we check if a search was made, i.e if the Get request contains a "query" element
     if (request.method == "GET") and ("query" in request.GET):
         query = request.GET["query"]
         query_list = query.split()
         user = request.user
-        list_tasks=Task.objects.filter(name__contains=query)
-        return render(request,'mytasks.html' ,locals())
+        list_tasks = Task.objects.filter(name__contains=query)
+        return render(request, 'mytasks.html', locals())
     # Again, we now check if some form of filter was activated...
     elif (request.method == "GET") and ('member' in request.GET):
         query = request.GET["member"]
         query_list = [User.objects.all().get(username=m) for m in query.split()]
         user = request.user
-        list_tasks=Task.objects.filter(assignee=query_list[0])
-        return render(request,'mytasks.html' ,locals())
+        list_tasks = Task.objects.filter(assignee=query_list[0])
+        return render(request, 'mytasks.html', locals())
     # Else we just show the user all of HIS tasks
     else:
         user = request.user
         list_tasks = Task.objects.filter(assignee=user)
         list_projects = Project.objects.filter(members=user)
-        chart_data=[]
+        chart_data = []
         for project in list_projects:
-            chart_data.append(Task.objects.filter(assignee=user,project=project).count())
+            chart_data.append(Task.objects.filter(assignee=user, project=project).count())
         return (render(request, 'mytasks.html', locals()))
 
 
@@ -233,21 +229,26 @@ def activity(request, id_project):
     list_members = Project.objects.get(id=id_project).members.all()
     contributions = []
     for member in list_members:
-        contributions.append(nb_contribution(User.objects.get(username=member.username), Project.objects.get(id=id_project)))
+        contributions.append(
+            nb_contribution(User.objects.get(username=member.username), Project.objects.get(id=id_project)))
 
     return (render(request, 'activity.html', locals()))
 
-@login_required
-def gantt(request,id_project):
-    list_members=Project.objects.get(id=id_project).members.all()
-    contributions=[]
-    for member in list_members:
-        contributions.append(nb_contribution(User.objects.get(username=member.username),Project.objects.get(id=id_project)))
-    return(render(request,'gantt.html',locals()))
 
-def nb_contribution(user,project):
-    n=Journal.objects.filter(task__project=project,author=user).count()
-    return(n)
+@login_required
+def gantt(request, id_project):
+    list_members = Project.objects.get(id=id_project).members.all()
+    contributions = []
+    for member in list_members:
+        contributions.append(
+            nb_contribution(User.objects.get(username=member.username), Project.objects.get(id=id_project)))
+    return (render(request, 'gantt.html', locals()))
+
+
+def nb_contribution(user, project):
+    n = Journal.objects.filter(task__project=project, author=user).count()
+    return (n)
+
 
 @login_required
 def export(request):
@@ -260,28 +261,35 @@ def export(request):
     return response
 
 
-
-
 ########Analog function for better readability, used for filtering queries
-def ordering(request,task_query_set):
+def ordering(request, task_query_set):
     if (request.method == "GET") and ('sort' in request.GET):
         query = request.GET["sort"]
-        q=query.split()
-        if q[1] == "up" :
+        q = query.split()
+        if q[1] == "up":
             task_query_set.filter().order_by(q[0])
         else:
-            task_query_set.order_by('-'+q[0])
+            task_query_set.order_by('-' + q[0])
     return task_query_set
 
-def filters(request,list_tasks):
+
+def filters(request, list_tasks):
     # Initialisation des variables pour pouvoir return une liste vide si on a pas les methodes get necessaires..
-    status_q_list =[]
-    query_list=[]
+    status_q_list = []
+    query_list = []
     date1 = datetime.datetime.today().date()
-    date1=date1.replace(year=datetime.MINYEAR)
+    # date1 = date1.replace(year=datetime.MINYEAR)
     date2 = datetime.datetime.today().date()
-    date2=date2.replace(year=datetime.MAXYEAR)
-    #On verifie si l'utilisateur a voulu filtrer selon le status ou pas
+    # date2 = date2.replace(year=datetime.MAXYEAR)
+    date3 = datetime.datetime.today().date()
+    # date3 = date3.replace(year=datetime.MINYEAR)
+    date4 = datetime.datetime.today().date()
+    # date4 = date4.replace(year=datetime.MAXYEAR)
+    date1 = date1.isoformat()
+    date2 = date2.isoformat()
+    date3 =date3.isoformat()
+    date4 = date4.isoformat()
+    # On verifie si l'utilisateur a voulu filtrer selon le status ou pas
     if (request.method == "GET") and ('status' in request.GET):
         status_q = request.GET.getlist("status")
         status_q_list = [Status.objects.all().get(name=s) for s in status_q]
@@ -290,11 +298,18 @@ def filters(request,list_tasks):
     if (request.method == "GET") and ('member' in request.GET):
         query = request.GET.getlist("member")
         query_list = [User.objects.all().get(username=m) for m in query]
-        list_tasks=list_tasks.filter(assignee__in=query_list)
+        list_tasks = list_tasks.filter(assignee__in=query_list)
     # On verifie si l'utilisateur a voulu filtrer selon la "date1" ou pas
-    if (request.method == "GET") and ('date1' in request.GET):
+    if (request.method == "GET") and (
+            ('date1' in request.GET) or ('date2' in request.GET) or ('date3' in request.GET) or (
+            'date4' in request.GET)):
         date1 = request.GET["date1"]
-        # query_list = [User.objects.all().get(username=m) for m in query]
-        list_tasks = list_tasks.filter(start_date__range=[date1,date2])
+        date2 = request.GET["date2"]
+        date3 = request.GET["date3"]
+        date4 = request.GET["date4"]
+        list_tasks = list_tasks.filter(start_date__range=[date1, date2])
+        list_tasks = list_tasks.filter(due_date__range=[date3, date4])
 
-    return(list_tasks,status_q_list,query_list,date1)
+    return (list_tasks, status_q_list, query_list, date1, date2, date3, date4)
+
+
