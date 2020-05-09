@@ -277,6 +277,7 @@ def filters(request, list_tasks):
     # Initialisation des variables pour pouvoir return une liste vide si on a pas les methodes get necessaires..
     status_q_list = []
     query_list = []
+
     date1 = datetime.datetime.today().date()
     # date1 = date1.replace(year=datetime.MINYEAR)
     date2 = datetime.datetime.today().date()
@@ -300,15 +301,42 @@ def filters(request, list_tasks):
         query_list = [User.objects.all().get(username=m) for m in query]
         list_tasks = list_tasks.filter(assignee__in=query_list)
     # On verifie si l'utilisateur a voulu filtrer selon la "date1" ou pas
-    if (request.method == "GET") and (
-            ('date1' in request.GET) or ('date2' in request.GET) or ('date3' in request.GET) or (
-            'date4' in request.GET)):
+    # if (request.method == "GET") and (
+    #         ('date1' in request.GET) or ('date2' in request.GET) or ('date3' in request.GET) or (
+    #         'date4' in request.GET)):
+    #     date1 = request.GET["date1"]
+    #     date2 = request.GET["date2"]
+    #     date3 = request.GET["date3"]
+    #     date4 = request.GET["date4"]
+    #     list_tasks = list_tasks.filter(start_date__range=[date1, date2])
+    #     list_tasks = list_tasks.filter(due_date__range=[date3, date4])
+
+
+    # if (request.method == "GET") and ('date1' in request.GET):
+    #     date1 = request.GET["date1"]
+    #     list_tasks = list_tasks.filter(start_date__gte=date1)
+    # if (request.method == "GET") and ('date2' in request.GET):
+    #     date2 = request.GET["date2"]
+    #     list_tasks = list_tasks.filter(start_date__lte=date1)
+    # if (request.method == "GET") and ('date3' in request.GET):
+    #     date3 = request.GET["date3"]
+    #     list_tasks = list_tasks.filter(due_date__gte=date1)
+    # if (request.method == "GET") and ('date4' in request.GET) and (request.GET["date4"]):
+    #     date4 = request.GET["date4"]
+    #     list_tasks = list_tasks.filter(due_date__lte=date1)
+    if (request.method=="GET" and ('date1' in request.GET)):
         date1 = request.GET["date1"]
         date2 = request.GET["date2"]
         date3 = request.GET["date3"]
         date4 = request.GET["date4"]
-        list_tasks = list_tasks.filter(start_date__range=[date1, date2])
-        list_tasks = list_tasks.filter(due_date__range=[date3, date4])
+        if date1 != '':
+            list_tasks = list_tasks.filter(start_date__gte=date1)
+        if date2 != '':
+            list_tasks = list_tasks.filter(start_date__lte=date2)
+        if date3 != '':
+            list_tasks = list_tasks.filter(due_date__gte=date3)
+        if date4 != '':
+            list_tasks = list_tasks.filter(due_date__lte=date4)
 
     return (list_tasks, status_q_list, query_list, date1, date2, date3, date4)
 
