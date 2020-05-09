@@ -193,14 +193,6 @@ def mytasks(request):
         query_list = query.split()
         user = request.user
         list_tasks = Task.objects.filter(name__contains=query)
-        return render(request, 'mytasks.html', locals())
-    # Again, we now check if some form of filter was activated...
-    elif (request.method == "GET") and ('member' in request.GET):
-        query = request.GET["member"]
-        query_list = [User.objects.all().get(username=m) for m in query.split()]
-        user = request.user
-        list_tasks = Task.objects.filter(assignee=query_list[0])
-        return render(request, 'mytasks.html', locals())
     # Else we just show the user all of HIS tasks
     else:
         user = request.user
@@ -209,7 +201,7 @@ def mytasks(request):
         chart_data = []
         for project in list_projects:
             chart_data.append(Task.objects.filter(assignee=user, project=project).count())
-        return (render(request, 'mytasks.html', locals()))
+    return render(request, 'mytasks.html', locals())
 
 
 @login_required
@@ -261,7 +253,7 @@ def export(request):
     return response
 
 
-########Analog function for better readability, used for filtering queries
+########Analog function for better readability, used for filtering queries #####------Ne fonctionne pas encore
 def ordering(request, task_query_set):
     if (request.method == "GET") and ('sort' in request.GET):
         query = request.GET["sort"]
@@ -279,17 +271,16 @@ def filters(request, list_tasks):
     query_list = []
 
     date1 = datetime.datetime.today().date()
-    # date1 = date1.replace(year=datetime.MINYEAR)
     date2 = datetime.datetime.today().date()
-    # date2 = date2.replace(year=datetime.MAXYEAR)
     date3 = datetime.datetime.today().date()
-    # date3 = date3.replace(year=datetime.MINYEAR)
     date4 = datetime.datetime.today().date()
-    # date4 = date4.replace(year=datetime.MAXYEAR)
+
+    # cette partie sert simplement a convertir les placehholder dans le bon format pour django
     date1 = date1.isoformat()
     date2 = date2.isoformat()
-    date3 =date3.isoformat()
+    date3 = date3.isoformat()
     date4 = date4.isoformat()
+
     # On verifie si l'utilisateur a voulu filtrer selon le status ou pas
     if (request.method == "GET") and ('status' in request.GET):
         status_q = request.GET.getlist("status")
@@ -300,35 +291,13 @@ def filters(request, list_tasks):
         query = request.GET.getlist("member")
         query_list = [User.objects.all().get(username=m) for m in query]
         list_tasks = list_tasks.filter(assignee__in=query_list)
-    # On verifie si l'utilisateur a voulu filtrer selon la "date1" ou pas
-    # if (request.method == "GET") and (
-    #         ('date1' in request.GET) or ('date2' in request.GET) or ('date3' in request.GET) or (
-    #         'date4' in request.GET)):
-    #     date1 = request.GET["date1"]
-    #     date2 = request.GET["date2"]
-    #     date3 = request.GET["date3"]
-    #     date4 = request.GET["date4"]
-    #     list_tasks = list_tasks.filter(start_date__range=[date1, date2])
-    #     list_tasks = list_tasks.filter(due_date__range=[date3, date4])
-
-
-    # if (request.method == "GET") and ('date1' in request.GET):
-    #     date1 = request.GET["date1"]
-    #     list_tasks = list_tasks.filter(start_date__gte=date1)
-    # if (request.method == "GET") and ('date2' in request.GET):
-    #     date2 = request.GET["date2"]
-    #     list_tasks = list_tasks.filter(start_date__lte=date1)
-    # if (request.method == "GET") and ('date3' in request.GET):
-    #     date3 = request.GET["date3"]
-    #     list_tasks = list_tasks.filter(due_date__gte=date1)
-    # if (request.method == "GET") and ('date4' in request.GET) and (request.GET["date4"]):
-    #     date4 = request.GET["date4"]
-    #     list_tasks = list_tasks.filter(due_date__lte=date1)
+    # On verifie si l'utilisateur a voulu filtrer selon les dates, je verifie donc si "date1" est incluse, et je receuille quand meme les autres, ou pas
     if (request.method=="GET" and ('date1' in request.GET)):
         date1 = request.GET["date1"]
         date2 = request.GET["date2"]
         date3 = request.GET["date3"]
         date4 = request.GET["date4"]
+        #Rmq: comme la requete "date" est toujurs presente si on submit une recherche, je ne filtre que sur celles qui sont non nulles....
         if date1 != '':
             list_tasks = list_tasks.filter(start_date__gte=date1)
         if date2 != '':
@@ -337,7 +306,7 @@ def filters(request, list_tasks):
             list_tasks = list_tasks.filter(due_date__gte=date3)
         if date4 != '':
             list_tasks = list_tasks.filter(due_date__lte=date4)
-
+    # Enfin ces retours sont utilisés pour le template, pour une meilleure ergonomie je garde affichée les parametres de la recherche precendete.
     return (list_tasks, status_q_list, query_list, date1, date2, date3, date4)
 
 

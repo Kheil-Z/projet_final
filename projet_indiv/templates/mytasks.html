@@ -17,25 +17,7 @@
 
         <br><br><br>
         <div class="row">
-        <!--   Checkbox for search     -->
-            <div class="col-2" >
-                <div style="width:100px;height:50px;border:1px solid #000;">
-                    <form action="/mytasks">
-                        {% for m in members %}
-                        <div class="form-check">
-                            <label class="form-check-label" for="check1">
-                                <input type="checkbox" class="form-check-input" id="check1" name="member" value="{{m}}">{{m.username}}
-                            </label>
-                        </div>
-                        {%endfor%}
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </form>
-                </div>
-            </div>
-
-
             <div class="col-6">
-
                 <!-- Table of tasks -->
                 <table class="table">
 
