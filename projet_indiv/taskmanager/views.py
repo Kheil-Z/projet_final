@@ -64,15 +64,16 @@ def project(request, id_project):
     list_tasks = Task.objects.filter(project=project)  # List of the tasks of this project
     progress=projectprogress(project)
 
-    # Now we apply more filters if the user requested some...
-    if (request.method == "GET") and ('member' in request.GET):
-        query = request.GET.getlist("member")
-        query_list = [User.objects.all().get(username=m) for m in query]
-        list_tasks = list_tasks.filter(assignee__in=query_list)
+    # # Now we apply more filters if the user requested some...
+    # if (request.method == "GET") and ('member' in request.GET):
+    #     query = request.GET.getlist("member")
+    #     query_list = [User.objects.all().get(username=m) for m in query]
+    #     list_tasks = list_tasks.filter(assignee__in=query_list)
     # list_tasks = ordering(request, list_tasks)
-    status_q_list = filters(request, list_tasks)
+    list_tasks,status_q_list,query_list,date1 = filters(request, list_tasks)
 
-    Status_all = Status.objects.all(); #Needed for the template and form...
+    # Needed for the template and form...
+    Status_all = Status.objects.all()
     return render(request, 'project.html', locals())
 
 
@@ -272,9 +273,28 @@ def ordering(request,task_query_set):
             task_query_set.order_by('-'+q[0])
     return task_query_set
 
-def filters(request,task_query_set):
+def filters(request,list_tasks):
+    # Initialisation des variables pour pouvoir return une liste vide si on a pas les methodes get necessaires..
     status_q_list =[]
+    query_list=[]
+    date1 = datetime.datetime.today().date()
+    date1=date1.replace(year=datetime.MINYEAR)
+    date2 = datetime.datetime.today().date()
+    date2=date2.replace(year=datetime.MAXYEAR)
+    #On verifie si l'utilisateur a voulu filtrer selon le status ou pas
     if (request.method == "GET") and ('status' in request.GET):
         status_q = request.GET.getlist("status")
         status_q_list = [Status.objects.all().get(name=s) for s in status_q]
-    return(status_q_list)
+        list_tasks = list_tasks.filter(status__in=status_q_list)
+    # On verifie si l'utilisateur a voulu filtrer selon les membres ou pas
+    if (request.method == "GET") and ('member' in request.GET):
+        query = request.GET.getlist("member")
+        query_list = [User.objects.all().get(username=m) for m in query]
+        list_tasks=list_tasks.filter(assignee__in=query_list)
+    # On verifie si l'utilisateur a voulu filtrer selon la "date1" ou pas
+    if (request.method == "GET") and ('date1' in request.GET):
+        date1 = request.GET["date1"]
+        # query_list = [User.objects.all().get(username=m) for m in query]
+        list_tasks = list_tasks.filter(start_date__range=[date1,date2])
+
+    return(list_tasks,status_q_list,query_list,date1)
