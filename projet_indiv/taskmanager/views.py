@@ -63,7 +63,7 @@ def project(request, id_project):
     # # Now we apply more filters if the user requested some...
 
     list_tasks, status_q_list, query_list, date1, date2, date3, date4, project_query = filters(request, list_tasks)
-
+    list_tasks = ordering(request, list_tasks)
     # Needed for the template and form...
     Status_all = Status.objects.all()
     return render(request, 'project.html', locals())
