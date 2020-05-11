@@ -304,8 +304,10 @@ def filters(request, list_tasks):
         list_tasks = list_tasks.filter(status__in=status_q_list)
     # On verifier si l'utilisateur a voulu filtrer selon le projet
     if (request.method == "GET") and ('project' in request.GET):
-        project_q = request.GET.getlist("status")
-        project_q_list = [Status.objects.all().get(name=s) for s in status_q]
+        project_q = request.GET.getlist("project")
+        project_q_list = [Project.objects.all().get(name=s) for s in project_q]
+        print(project_q_list)
+        print(".......")
         list_tasks = list_tasks.filter(project__in=project_q_list)
     # On verifie si l'utilisateur a voulu filtrer selon les membres ou pas
     if (request.method == "GET") and ('member' in request.GET):
