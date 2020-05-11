@@ -93,9 +93,15 @@
 
                         <!--  Progress % Filter-->
                         <div class="col-2">
-                            <p>Progress</p>
-                            <div id="progress"></div>
-                            <input id="sliderValueInput" type="hidden" value="">
+                            <p> Progress %</p>
+                            <br><br>
+                             <div class="sliderCont">
+                                <div id="range"></div>
+                            </div>
+                            <div class="formCost form-inline">
+                                <input class="form-control" type="hidden" id="minProgress" name="minProgress" value="{{min}}"/>
+                                <input class="form-control" type="hidden" id="maxProgress" name="maxProgress" value="{{max}}"/>
+                            </div>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>

@@ -1,0 +1,68 @@
+
+{% extends 'base.html' %}
+
+{% block main %}
+    <!-- Main container -->
+    <main>
+        <br><br><br><br>
+
+
+        <!-- Jumbotron -->
+        <div class="jumbotron jumbotron-fluid">
+          <div class="container">
+            <h1 class="display-4">Your Search</h1>
+            <p class="lead">The list of all tasks corresponding to your search</p>
+          </div>
+        </div>
+
+        <br><br><br>
+        <div class="row">
+            <div class="col-6">
+                <!-- Table of tasks -->
+                <table class="table">
+
+                    <!-- heads -->
+                    <thead>
+                        <tr>
+                            <th scope="col" >Task</th>
+                            <th scope="col" class="text-center">Assignee</th>
+                            <th scope="col" class="text-center">Project</th>
+                            <th scope="col" class="text-center">Start date</th>
+                            <th scope="col" class="text-center">Due date</th>
+                            <th scope="col" class="text-center">Progress</th>
+                            <th scope="col" class="text-center"></th>
+                        </tr>
+                    </thead>
+
+                    <!-- body of the table -->
+                    <tbody>
+                        {% for task in list_tasks %}
+                                <tr>
+                                    <th scope="row" ><a href="/task/{{task.id}}">{{task.name}}</a></th>
+                                    <th scope="row" >{{task.assignee}}</th>
+                                    <th scope="row" class="text-center"><a href="/project/{{task.project.id}}">{{task.project.name}}</a></th>
+                                    <td scope="row" class="text-center">{{task.start_date}}</td>
+                                    <td scope="row" class="text-center">{{task.due_date}}</td>
+                                    <td scope="row" class="text-center">
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" aria-valuenow="{{task.progress}}" aria-valuemin="0" aria-valuemax="100" style="width:{{task.progress}}%">{{task.progress}}%</div>
+                                        </div>
+                                    </td>
+                                    <td scope="row" class="text-center">
+                                        <a href="/updatetask/{{task.id}}">
+                                            <img src="https://cdn.onlinewebfonts.com/svg/img_148628.png" width="20" height="20">
+                                        </a>
+                                    </td>
+                                </tr>
+
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+                <!-- end of table -->
+        </div>
+
+
+
+    </main>
+    {% endblock %}>

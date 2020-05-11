@@ -66,7 +66,7 @@ def project(request, id_project):
     #     query_list = [User.objects.all().get(username=m) for m in query]
     #     list_tasks = list_tasks.filter(assignee__in=query_list)
     # list_tasks = ordering(request, list_tasks)
-    list_tasks, status_q_list, query_list, date1, date2, date3, date4 = filters(request, list_tasks)
+    list_tasks, status_q_list, query_list, date1, date2, date3, date4, max, min = filters(request, list_tasks)
 
     # Needed for the template and form...
     Status_all = Status.objects.all()
@@ -187,6 +187,18 @@ def newjournal(request, id_task):
 def mytasks(request):
     members = User.objects.all()
     projects = Project.objects.all()
+    user = request.user
+    list_tasks = Task.objects.filter(assignee=user)
+    list_projects = Project.objects.filter(members=user)
+    chart_data = []
+    for project in list_projects:
+        chart_data.append(Task.objects.filter(assignee=user, project=project).count())
+    return render(request, 'mytasks.html', locals())
+
+@login_required
+def search(request):
+    members = User.objects.all()
+    projects = Project.objects.all()
     # First we check if a search was made, i.e if the Get request contains a "query" element
     if (request.method == "GET") and ("query" in request.GET):
         query = request.GET["query"]
@@ -201,7 +213,7 @@ def mytasks(request):
         chart_data = []
         for project in list_projects:
             chart_data.append(Task.objects.filter(assignee=user, project=project).count())
-    return render(request, 'mytasks.html', locals())
+    return render(request, 'search.html', locals())
 
 
 @login_required
@@ -275,6 +287,9 @@ def filters(request, list_tasks):
     date3 = datetime.datetime.today().date()
     date4 = datetime.datetime.today().date()
 
+    max=100
+    min=0
+
     # cette partie sert simplement a convertir les placehholder dans le bon format pour django
     date1 = date1.isoformat()
     date2 = date2.isoformat()
@@ -306,7 +321,13 @@ def filters(request, list_tasks):
             list_tasks = list_tasks.filter(due_date__gte=date3)
         if date4 != '':
             list_tasks = list_tasks.filter(due_date__lte=date4)
+    if (request.method == "GET" and (('maxProgress' in request.GET) or ('minProgress' in request.GET))):
+        max = request.GET['maxProgress']
+        min = request.GET['minProgress']
+        list_tasks = list_tasks.filter(progress__range=[int(min[:-3]),int(max[:-3])])
     # Enfin ces retours sont utilisés pour le template, pour une meilleure ergonomie je garde affichée les parametres de la recherche precendete.
-    return (list_tasks, status_q_list, query_list, date1, date2, date3, date4)
+
+    return (list_tasks, status_q_list, query_list, date1, date2, date3, date4,max,min)
+
 
 
