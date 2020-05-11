@@ -3,9 +3,8 @@
 
 {% block main %}
     <!-- Main container -->
-    <main>
+    <main .ml-1>
         <br><br><br><br>
-
 
         <!-- Jumbotron -->
         <div class="jumbotron jumbotron-fluid">
@@ -15,9 +14,91 @@
           </div>
         </div>
 
+            <!--   Checkbox for search     -->
+        <button class="btn btn-xs " style="background-color: lightgreen; type="button" data-toggle="collapse" data-target="#Filtering" aria-expanded="false" aria-controls="collapseExample">
+            Advanced Search
+        </button>
+        <div class="collapse" id="Filtering">
+            <div class="card card-body">
+
+                <form action="/search" class="inline">
+                    <div class="row">
+                    <!-- Pour maintenir la recherche effectuee..-->
+                         {% if bool%}
+                                <input class="form-control mr-sm-2" type="hidden" name="query" value ="{{query}}">
+                        {%endif%}
+                    <!--  Member Filter-->
+                        <div class="col-2" style="margin-left: 10px" >
+                            <label class="form-check-label" for="member_check">Members</label>
+                            {% for m in members %}
+                            <div class="form-check" id="member_check">
+                                <input type="checkbox" class="form-check-input" id="check1" name="member" {%if m in query_list%}checked{%endif%} value="{{m}}">{{m.username}}
+                            </div>
+                            {%endfor%}
+                        </div>
+                    <!-- Project Filter -->
+                    <div class="col-2">
+                        <label class="form-check-label" for="project_check">Projects</label>
+                            {% for p in projects %}
+                            <div class="form-check" id="project_check">
+                                <input type="checkbox" class="form-check-input" id="project" name="project" {%if p in project_query%}checked{%endif%} value="{{p.name}}">{{p.name}}
+                            </div>
+                            {%endfor%}
+                    </div>
+                    <!-- Start Date Filter-->
+                        <div class="col-2">
+                            <div class="form-group"> <!-- Date input -->
+                                <label class="control-label" for="date1">Start Date after:</label>
+                                <input class="form-control" id="date1" name="date1" autocomplete="off" placeholder="{{date1}}"  type="text"/>
+                            </div>
+                            <div class="form-group"> <!-- Date input -->
+                                <label class="control-label" for="date2">Start Date before:</label>
+                                <input class="form-control" id="date2" name="date2" autocomplete="off"  placeholder="{{date2}}"  type="text"/>
+                            </div>
+                        </div>
+                    <!-- Due Date Filter-->
+                        <div class="col-2">
+                            <div class="form-group"> <!-- Date input -->
+                                <label class="control-label" for="date3">Due Date after:</label>
+                                <input class="form-control" id="date3" name="date3" autocomplete="off"  placeholder="{{date3}}" type="text"/>
+                            </div>
+                            <div class="form-group"> <!-- Date input -->
+                                <label class="control-label" for="date4">Due Date before:</label>
+                                <input class="form-control" id="date4" name="date4" autocomplete="off"  placeholder="{{date4}}" type="text"/>
+                            </div>
+                        </div>
+
+                    <!--  Member Filter-->
+                        <div class="col-2">
+                            <label class="form-check-label" for="status_check">Status Type</label>
+                            {% for s in Status_all %}
+                            <div class="form-check" id="status_check">
+                                <input type="checkbox" class="form-check-input" name="status" {%if s in status_q_list%}checked{%endif%} value="{{s}}">{{s.name}}
+                            </div>
+                            {%endfor%}
+                        </div>
+
+                        <!--  Progress % Filter-->
+                        <div class="col-2">
+                            <p> Progress %</p>
+                            <br><br>
+                             <div class="sliderCont">
+                                <div id="range"></div>
+                            </div>
+                            <div class="formCost form-inline">
+                                <input class="form-control" type="hidden" id="minProgress" name="minProgress" value="0"/>
+                                <input class="form-control" type="hidden" id="maxProgress" name="maxProgress" value="100"/>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+
+            </div>
+        </div>
         <br><br><br>
         <div class="row">
-            <div class="col-6">
+            <div class="col-12">
                 <!-- Table of tasks -->
                 <table class="table">
 
@@ -25,7 +106,17 @@
                     <thead>
                         <tr>
                             <th scope="col" >Task</th>
-                            <th scope="col" class="text-center">Assignee</th>
+                            <th scope="col" class="text-center">Assignee
+                                <a href="/project/{{id_project}}?sort=assignee+up">
+                        <svg class="bi bi-caret-up-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path d="M7.247 4.86l-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 00.753-1.659l-4.796-5.48a1 1 0 00-1.506 0z"/>
+                        </svg> </a>
+                                <a href="/project/{{id_project}}?sort=assignee+down">
+                            <svg class="bi bi-caret-down-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 01.753 1.659l-4.796 5.48a1 1 0 01-1.506 0z"/>
+</svg>
+                                </a>
+                            </th>
                             <th scope="col" class="text-center">Project</th>
                             <th scope="col" class="text-center">Start date</th>
                             <th scope="col" class="text-center">Due date</th>

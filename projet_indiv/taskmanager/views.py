@@ -61,12 +61,8 @@ def project(request, id_project):
     progress = projectprogress(project)
 
     # # Now we apply more filters if the user requested some...
-    # if (request.method == "GET") and ('member' in request.GET):
-    #     query = request.GET.getlist("member")
-    #     query_list = [User.objects.all().get(username=m) for m in query]
-    #     list_tasks = list_tasks.filter(assignee__in=query_list)
-    # list_tasks = ordering(request, list_tasks)
-    list_tasks, status_q_list, query_list, date1, date2, date3, date4, max, min = filters(request, list_tasks)
+
+    list_tasks, status_q_list, query_list, date1, date2, date3, date4 = filters(request, list_tasks)
 
     # Needed for the template and form...
     Status_all = Status.objects.all()
@@ -201,18 +197,24 @@ def search(request):
     projects = Project.objects.all()
     # First we check if a search was made, i.e if the Get request contains a "query" element
     if (request.method == "GET") and ("query" in request.GET):
+        bool = True
         query = request.GET["query"]
         query_list = query.split()
         user = request.user
         list_tasks = Task.objects.filter(name__contains=query)
     # Else we just show the user all of HIS tasks
     else:
+        bool= False
         user = request.user
         list_tasks = Task.objects.filter(assignee=user)
         list_projects = Project.objects.filter(members=user)
         chart_data = []
         for project in list_projects:
             chart_data.append(Task.objects.filter(assignee=user, project=project).count())
+    list_tasks, status_q_list, query_list, date1, date2, date3, date4, project_query = filters(request, list_tasks)
+
+    # Needed for the template and form...
+    Status_all = Status.objects.all()
     return render(request, 'search.html', locals())
 
 
@@ -280,15 +282,13 @@ def ordering(request, task_query_set):
 def filters(request, list_tasks):
     # Initialisation des variables pour pouvoir return une liste vide si on a pas les methodes get necessaires..
     status_q_list = []
+    project_q_list = []
     query_list = []
 
     date1 = datetime.datetime.today().date()
     date2 = datetime.datetime.today().date()
     date3 = datetime.datetime.today().date()
     date4 = datetime.datetime.today().date()
-
-    max=100
-    min=0
 
     # cette partie sert simplement a convertir les placehholder dans le bon format pour django
     date1 = date1.isoformat()
@@ -301,6 +301,11 @@ def filters(request, list_tasks):
         status_q = request.GET.getlist("status")
         status_q_list = [Status.objects.all().get(name=s) for s in status_q]
         list_tasks = list_tasks.filter(status__in=status_q_list)
+    # On verifier si l'utilisateur a voulu filtrer selon le projet
+    if (request.method == "GET") and ('project' in request.GET):
+        project_q = request.GET.getlist("status")
+        project_q_list = [Status.objects.all().get(name=s) for s in status_q]
+        list_tasks = list_tasks.filter(project__in=project_q_list)
     # On verifie si l'utilisateur a voulu filtrer selon les membres ou pas
     if (request.method == "GET") and ('member' in request.GET):
         query = request.GET.getlist("member")
@@ -327,7 +332,7 @@ def filters(request, list_tasks):
         list_tasks = list_tasks.filter(progress__range=[int(min[:-3]),int(max[:-3])])
     # Enfin ces retours sont utilisés pour le template, pour une meilleure ergonomie je garde affichée les parametres de la recherche precendete.
 
-    return (list_tasks, status_q_list, query_list, date1, date2, date3, date4,max,min)
+    return (list_tasks, status_q_list, query_list, date1, date2, date3, date4, project_q_list)
 
 
 
