@@ -107,20 +107,46 @@
                         <tr>
                             <th scope="col" >Task</th>
                             <th scope="col" class="text-center">Assignee
-                                <a href="/project/{{id_project}}?sort=assignee+up">
+                                <a href="/search/?sort=assignee+up&query={{query}}">
                         <svg class="bi bi-caret-up-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
   <path d="M7.247 4.86l-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 00.753-1.659l-4.796-5.48a1 1 0 00-1.506 0z"/>
                         </svg> </a>
-                                <a href="/project/{{id_project}}?sort=assignee+down">
+                                <a href="/search?sort=assignee+down&query={{query}}">
                             <svg class="bi bi-caret-down-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
   <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 01.753 1.659l-4.796 5.48a1 1 0 01-1.506 0z"/>
 </svg>
                                 </a>
                             </th>
                             <th scope="col" class="text-center">Project</th>
-                            <th scope="col" class="text-center">Start date</th>
-                            <th scope="col" class="text-center">Due date</th>
-                            <th scope="col" class="text-center">Progress</th>
+                            <th scope="col" class="text-center">Start date
+                                <a href="/search/?sort=start_date+up&query={{query}}">
+                        <svg class="bi bi-caret-up-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path d="M7.247 4.86l-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 00.753-1.659l-4.796-5.48a1 1 0 00-1.506 0z"/>
+                        </svg> </a>
+                                <a href="/search?sort=start_date+down&query={{query}}">
+                            <svg class="bi bi-caret-down-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 01.753 1.659l-4.796 5.48a1 1 0 01-1.506 0z"/>
+</svg>
+                            </th>
+                            <th scope="col" class="text-center">Due date
+                                <a href="/search/?sort=due_date+up&query={{query}}">
+                        <svg class="bi bi-caret-up-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path d="M7.247 4.86l-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 00.753-1.659l-4.796-5.48a1 1 0 00-1.506 0z"/>
+                        </svg> </a>
+                                <a href="/search?sort=due_date+down&query={{query}}">
+                            <svg class="bi bi-caret-down-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 01.753 1.659l-4.796 5.48a1 1 0 01-1.506 0z"/>
+</svg>
+                            </th>
+                            <th scope="col" class="text-center">Progress
+                            <a href="/search/?sort=progress+up&query={{query}}">
+                        <svg class="bi bi-caret-up-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path d="M7.247 4.86l-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 00.753-1.659l-4.796-5.48a1 1 0 00-1.506 0z"/>
+                        </svg> </a>
+                                <a href="/search?sort=progress+down&query={{query}}">
+                            <svg class="bi bi-caret-down-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 01.753 1.659l-4.796 5.48a1 1 0 01-1.506 0z"/>
+</svg></th>
                             <th scope="col" class="text-center"></th>
                         </tr>
                     </thead>

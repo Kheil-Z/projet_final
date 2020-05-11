@@ -62,7 +62,7 @@ def project(request, id_project):
 
     # # Now we apply more filters if the user requested some...
 
-    list_tasks, status_q_list, query_list, date1, date2, date3, date4 = filters(request, list_tasks)
+    list_tasks, status_q_list, query_list, date1, date2, date3, date4, project_query = filters(request, list_tasks)
 
     # Needed for the template and form...
     Status_all = Status.objects.all()
@@ -213,6 +213,7 @@ def search(request):
             chart_data.append(Task.objects.filter(assignee=user, project=project).count())
     list_tasks, status_q_list, query_list, date1, date2, date3, date4, project_query = filters(request, list_tasks)
 
+    list_tasks = ordering(request,list_tasks)
     # Needed for the template and form...
     Status_all = Status.objects.all()
     return render(request, 'search.html', locals())
@@ -268,15 +269,15 @@ def export(request):
 
 
 ########Analog function for better readability, used for filtering queries #####------Ne fonctionne pas encore
-def ordering(request, task_query_set):
+def ordering(request, list_tasks):
     if (request.method == "GET") and ('sort' in request.GET):
         query = request.GET["sort"]
         q = query.split()
         if q[1] == "up":
-            task_query_set.filter().order_by(q[0])
+            list_tasks = list_tasks.filter().order_by(q[0])
         else:
-            task_query_set.order_by('-' + q[0])
-    return task_query_set
+            list_tasks =list_tasks.order_by('-' + q[0])
+    return list_tasks
 
 
 def filters(request, list_tasks):
